@@ -1,5 +1,6 @@
 package org.me.test;
 
+import java.io.File;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,18 +113,22 @@ public class TestJsonUtils {
 
     @Test
     public void testObjectToJsonCompact() throws JsonUtilsException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("compact.json").getFile());
         // ARRANGE - I have the expect in a relative path for testing.
-        String expectPersonJsonCompact = JsonUtils.readJsonFromFile("./src/test/resources/compact.json");
+        String expectPersonJsonCompact = JsonUtils.readJsonFromFile(file.getAbsolutePath());
         // ACT
         String actualPersonJsonCompact = JsonUtils.objectToJsonCompact(personList);
         // ASSERT
         assertEquals(expectPersonJsonCompact, actualPersonJsonCompact);
     }
-    
+
     @Test
     public void testObjectToJsonPretty() throws JsonUtilsException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("pretty.json").getFile());
         // ARRANGE - I have the expect in a relative path for testing.
-        String expectPersonJsonPretty = JsonUtils.readJsonFromFile("./src/test/resources/pretty.json");
+        String expectPersonJsonPretty = JsonUtils.readJsonFromFile(file.getAbsolutePath());
         // ACT
         String actualPersonJsonPretty = JsonUtils.objectToJsonPretty(personList);
         // ASSERT
@@ -132,10 +137,12 @@ public class TestJsonUtils {
 
     @Test
     public void testReadWriteJsonToFile_Compact() throws JsonUtilsException, SysUtilsException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("compact.json").getFile());
         // ARRANGE 
         String filename = Paths.get(SysUtils.getTmpDir(), "testReadWriteJsonToFile_Compact", "compact.json").toString();
         String personJsonCompact = JsonUtils.objectToJsonCompact(personList);
-        String readCompactExpect = JsonUtils.readJsonFromFile("./src/test/resources/compact.json");
+        String readCompactExpect = JsonUtils.readJsonFromFile(file.getAbsolutePath());
         // ACT
         JsonUtils.writeJsonToFile(personJsonCompact, filename);
         String readCompactActual = JsonUtils.readJsonFromFile(filename);
@@ -143,15 +150,17 @@ public class TestJsonUtils {
         assertEquals(readCompactExpect, readCompactActual);
         // Cleanup
         // Remove the tmp file tree.
-        SysUtils.rmDirTree(SysUtils.getDirName(filename));    
+        SysUtils.rmDirTree(SysUtils.getDirName(filename));
     }
-    
+
     @Test
     public void testReadWriteJsonToFile_Pretty() throws JsonUtilsException, SysUtilsException {
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("pretty.json").getFile());
         // ARRANGE 
         String filename = Paths.get(SysUtils.getTmpDir(), "testReadWriteJsonToFile_Pretty", "pretty.json").toString();
         String personJsonPretty = JsonUtils.objectToJsonPretty(personList);
-        String readPrettyExpect = JsonUtils.readJsonFromFile("./src/test/resources/pretty.json");
+        String readPrettyExpect = JsonUtils.readJsonFromFile(file.getAbsolutePath());
         // ACT
         JsonUtils.writeJsonToFile(personJsonPretty, filename);
         String readPrettyActual = JsonUtils.readJsonFromFile(filename);
@@ -159,7 +168,7 @@ public class TestJsonUtils {
         assertEquals(readPrettyExpect, readPrettyActual);
         // Cleanup
         // Remove the tmp file tree.
-        SysUtils.rmDirTree(SysUtils.getDirName(filename));    
+        SysUtils.rmDirTree(SysUtils.getDirName(filename));
     }
 
     @Test
@@ -176,8 +185,8 @@ public class TestJsonUtils {
         // http://javarevisited.blogspot.com/2011/02/how-to-write-equals-method-in-java.html
         assertTrue(expectList.equals(actualList));
     }
-    
-    @Test 
+
+    @Test
     public void testIsValidJson() {
         // ARRANGE
         String validJson = "[{\"firstName\":\"Elmer\",\"lastName\":\"Fudd\"}]";
