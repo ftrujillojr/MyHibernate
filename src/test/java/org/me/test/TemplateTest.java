@@ -6,7 +6,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.me.support.Latch;
 //import org.junit.Ignore;
 
 /*   ARRANGE    ACT    ASSERT
@@ -129,20 +128,7 @@ public class TemplateTest {
      * @throws InterruptedException 
      */
     
-    @Test(timeout = 2500)
-    public void testTransactTimeout() throws InterruptedException {
-        Latch l = new Latch(2, 1000); // 2 iterations @ 1000 milliseconds each.
-        l.startLatchCountdown();
-
-        // You can do more stuff here.  Your Test Thread is still running.
-        // I set a timeout of 2.5 seconds and the Latch to 2 seconds.
-        // Change timeout to 1500 and it will fail.
-        l.waitForLatchToComplete();
-
-        // Do some more stuff.
-    }    
-    
-    /**
+        /**
      * This is NOT a test.  
      * Just an example method that throws an exception ALWAYS.
      */
