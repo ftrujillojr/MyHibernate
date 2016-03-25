@@ -1,5 +1,6 @@
 package org.me.orm;
 
+import javax.ws.rs.WebApplicationException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
@@ -14,31 +15,43 @@ public class HibernateUtil {
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
-            // loads configuration and mappings
-            Configuration configuration = new Configuration()
-                    .addAnnotatedClass(org.me.orm.Employee.class)
-                    .addAnnotatedClass(org.me.orm.Department.class)
-                    .configure("hibernate.cfg.xml");
+            try {
+                // loads configuration and mappings
+                Configuration configuration = new Configuration()
+                        .addAnnotatedClass(org.me.orm.Employee.class)
+                        .addAnnotatedClass(org.me.orm.Department.class)
+                        .configure("hibernate.cfg.xml");
 
-            System.out.println("Hibernate Configuration loaded");
+                System.out.println("*** Hibernate Configuration loaded");
 
-            ServiceRegistry serviceRegistry
-                    = new StandardServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties())
-                    .build();
+                ServiceRegistry serviceRegistry
+                        = new StandardServiceRegistryBuilder()
+                        .applySettings(configuration.getProperties())
+                        .build();
 
-            System.out.println("Hibernate serviceRegistry created");
-            
-            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+                System.out.println("*** Hibernate serviceRegistry created");
 
-            System.out.println("Hibernate sessionFactory created");
+                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+
+                System.out.println("*** Hibernate sessionFactory created");
+
+            } catch (Exception ex) {
+                String msg = "\n*** Hey, Exception!!\n";
+                msg += ex.getMessage();
+                System.out.println(msg);
+                throw new WebApplicationException(msg);
+            }
         }
 
+        if(sessionFactory != null) {
+            System.out.println("\n*** Hibernate: sessionFactory returned.\n");
+        }
         return sessionFactory;
     }
 
     public static void shutdown() {
         getSessionFactory().close();
+        System.out.println("*** Hibernate shutdown!");
     }
 
 }

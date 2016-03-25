@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.me.orm.Department;
 import org.me.orm.Employee;
 import org.me.orm.HibernateUtil;
@@ -17,38 +18,59 @@ public class EmployeeResource {
     @Produces(MediaType.TEXT_PLAIN)
     @SuppressWarnings("ConvertToTryWithResources")
     public String index() {
+        Session session = null;
+        Transaction tx = null;
 
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-        Session session = sessionFactory.openSession();
-        
-        // begin a transaction 
-        session.getTransaction().begin();
-        
-        // creating a department object 
-        Department department = new Department();
+        try {
+            SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 
-        department.setDeptName("Produce");
-        // save department object 
-        session.save(department);
-        System.out.println(" Department saved, id: " + department.getId()); 
+            session = sessionFactory.getCurrentSession();
 
-        // creating an employee object 
-        Employee employee = new Employee(); 
+            tx = session.getTransaction();
+            tx.setTimeout(60);
+            tx.begin();
 
-        employee.setFirstName("Bugs Bunny"); 
-        employee.setSalary(10000); 
-        // set department of employee 
-        employee.setDepartment( department); 
-        // save employee object 
-        session.save( employee); 
-        System.out.println(" Employee saved, id: " + employee.getId()); 
+            // START unit of work
+            Department department = new Department();
+            department.setDeptName("Produce");
+            
+            session.save(department);
+            System.out.println(" Department saved, id: " + department.getId());
 
+            Employee employee = new Employee();
+            employee.setFirstName("Bugs Bunny");
+            employee.setSalary(15000);
+            employee.setDepartment(department);
 
-        // commit transaction 
-        session.getTransaction().commit(); 
-        
-        session.close(); 
-        HibernateUtil.shutdown();
+            session.save(employee);
+            System.out.println(" Employee saved, id: " + employee.getId());
+            // END unit of work
+
+            // This will keep memory leaks from happening.
+            // Must be called at the end of a unit of work, before committing the transaction and closing the session
+            session.flush();
+            session.clear();
+
+            tx.commit();
+            System.out.println("\n*** COMMIT !!!\n");
+
+        } catch (Exception ex) {
+            // If the Session throws an exception, the transaction must be 
+            // rolled back and the session discarded. The internal state of the 
+            // Session might not be consistent with the database after the 
+            // exception occurs.
+            if (tx != null) {
+                tx.rollback();
+                System.out.println("\nROLLBACK!!\n");
+            }
+            System.out.println("\n*** EXCEPTION \n" + ex.getMessage());
+            throw ex;
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+                System.out.println("\n*** CLOSE session\n");
+            }
+        }
 
         return "Got employees!!";
     }
