@@ -1,4 +1,4 @@
-package org.me.orm;
+package org.me;
 
 import javax.ws.rs.WebApplicationException;
 import org.hibernate.SessionFactory;
@@ -18,8 +18,8 @@ public class HibernateUtil {
             try {
                 // loads configuration and mappings
                 Configuration configuration = new Configuration()
-                        .addAnnotatedClass(org.me.orm.Employee.class)
-                        .addAnnotatedClass(org.me.orm.Department.class)
+                        .addAnnotatedClass(org.me.models.Employee.class)
+                        .addAnnotatedClass(org.me.models.Department.class)
                         .configure("hibernate.cfg.xml");
 
                 System.out.println("*** Hibernate Configuration loaded");

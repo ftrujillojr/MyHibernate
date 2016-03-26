@@ -1,4 +1,4 @@
-package org.me.orm;
+package org.me.models;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
