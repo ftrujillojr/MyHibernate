@@ -21,9 +21,11 @@ public abstract class HibernateResourceAbstract {
     protected void beginTransaction(int timeout) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         session = sessionFactory.getCurrentSession();
-        tx = session.getTransaction();
-        tx.setTimeout(timeout);
-        tx.begin();
+        if (session != null && session.isOpen()) {
+            tx = session.getTransaction();
+            tx.setTimeout(timeout);
+            tx.begin();
+        }
     }
 
     protected void commitTransaction() {
