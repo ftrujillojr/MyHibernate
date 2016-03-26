@@ -53,5 +53,4 @@ public class HibernateUtil {
         getSessionFactory().close();
         System.out.println("*** Hibernate shutdown!");
     }
-
 }
