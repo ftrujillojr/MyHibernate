@@ -10,9 +10,9 @@ import org.me.HibernateResourceAbstract;
 import org.me.models.Department;
 import org.me.models.Employee;
 
-@Path("employee")
+@Path("/employee")
 public class EmployeeResource extends HibernateResourceAbstract {
-    
+
     public EmployeeResource() {
         this.setDebug(true);
     }
@@ -23,21 +23,23 @@ public class EmployeeResource extends HibernateResourceAbstract {
 
         try {
             this.beginTransaction(60);
-            
+
             // START unit of work
-            List<Employee> employeeList = session.createCriteria(Employee.class).list();
+            List<Employee> employeeList = session
+                    .createCriteria(Employee.class)
+                    .list();
 
             Iterator<Employee> itr = employeeList.iterator();
             while (itr.hasNext()) {
                 Employee employee = itr.next();
-                System.out.println("           id:" + employee.getId());
-                System.out.println("    firstName:" + employee.getFirstName());
-                System.out.println("       salary: " + employee.getSalary());
-                System.out.println("department_id:" + employee.getDepartment().getId());
-                System.out.println("     deptName: " + employee.getDepartment().getDeptName());
+//                Long departmentId = employee.getDepartmentId();
+//                Department department = (Department) session.get(Department.class, departmentId);
+//                String row = employee.toString() + " | " + department.toString();
+//                System.out.println(row);
+                System.out.println(employee.toString());
             }
             // END unit of work
-            
+
             this.commitTransaction();
         } catch (Exception ex) {
             this.rollbackTransaction(ex);
@@ -72,7 +74,7 @@ public class EmployeeResource extends HibernateResourceAbstract {
             session.save(employee);
             System.out.println(" Employee saved, id: " + employee.getId());
             // END unit of work
-            
+
             this.commitTransaction();
         } catch (Exception ex) {
             this.rollbackTransaction(ex);
