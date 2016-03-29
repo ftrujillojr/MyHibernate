@@ -6,6 +6,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
+/**
+ * This bootstrap works for Hibernate 4.3.11.Final
+ * 
+ * @author ftrujillo
+ */
 public class HibernateUtil {
 
     private static SessionFactory sessionFactory;
