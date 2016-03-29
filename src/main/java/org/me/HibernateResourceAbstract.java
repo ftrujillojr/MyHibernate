@@ -20,15 +20,16 @@ public abstract class HibernateResourceAbstract {
 
     protected void beginTransaction(int timeout) {
         if(debug) {
-            HibernateUtil.setDebug(true);
+            HibernateUtil4.setDebug(true);
         } else {
-            HibernateUtil.setDebug(false);
+            HibernateUtil4.setDebug(false);
         }
         
-        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        SessionFactory sessionFactory = HibernateUtil4.getSessionFactory();
         
         // http://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html_single/#session-per-request
-
+        // http://stackoverflow.com/questions/33005348/hibernate-5-org-hibernate-mappingexception-unknown-entity
+        
         session = sessionFactory.getCurrentSession();
         
         if (session != null && session.isOpen()) {

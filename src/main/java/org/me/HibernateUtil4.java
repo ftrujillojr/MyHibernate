@@ -9,18 +9,20 @@ import org.hibernate.service.ServiceRegistry;
 /**
  * This bootstrap works for Hibernate 4.3.11.Final
  * 
+ * http://www.codejava.net/frameworks/hibernate/building-hibernate-sessionfactory-from-service-registry
+ * 
  * @author ftrujillo
  */
-public class HibernateUtil {
+public class HibernateUtil4 {
 
     private static SessionFactory sessionFactory;
     private static boolean debug = false;
 
-    public HibernateUtil() {
+    public HibernateUtil4() {
     }
 
     public static void setDebug(boolean debug) {
-        HibernateUtil.debug = debug;
+        HibernateUtil4.debug = debug;
     }
 
     public static SessionFactory getSessionFactory() {
