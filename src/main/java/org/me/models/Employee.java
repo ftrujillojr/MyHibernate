@@ -16,7 +16,7 @@ public class Employee {
 
     @Id
     @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)  //  Hibernate5   GenerationType.IDENTITY
     private long id;
 
     @Column(name = "firstname")
