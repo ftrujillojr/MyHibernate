@@ -14,7 +14,7 @@ import org.me.models.Employee;
 public class EmployeeResource extends HibernateResourceAbstract {
 
     public EmployeeResource() {
-        this.setDebug(true);
+        this.setDebug(false);
     }
 
     @GET
@@ -22,8 +22,10 @@ public class EmployeeResource extends HibernateResourceAbstract {
     public String index() {
 
         try {
-            this.beginTransaction(60);
+            this.beginTransaction(20);
 
+            // http://www.tutorialspoint.com/hibernate/hibernate_query_language.htm
+            
             // START unit of work
             List<Employee> employeeList = session
                     .createCriteria(Employee.class)
@@ -58,7 +60,7 @@ public class EmployeeResource extends HibernateResourceAbstract {
     public String insert() {
 
         try {
-            this.beginTransaction(60);
+            this.beginTransaction(20);
 
             // START unit of work
             Department department = new Department();

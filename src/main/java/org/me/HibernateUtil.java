@@ -9,31 +9,39 @@ import org.hibernate.service.ServiceRegistry;
 public class HibernateUtil {
 
     private static SessionFactory sessionFactory;
+    private static boolean debug = false;
 
     public HibernateUtil() {
+    }
+
+    public static void setDebug(boolean debug) {
+        HibernateUtil.debug = debug;
     }
 
     public static SessionFactory getSessionFactory() {
         if (sessionFactory == null) {
             try {
                 // loads configuration and mappings
-                Configuration configuration = new Configuration()
-                        .addAnnotatedClass(org.me.models.Employee.class)
-                        .addAnnotatedClass(org.me.models.Department.class)
-                        .configure("hibernate.cfg.xml");
+                Configuration configuration = new Configuration().configure("hibernate.cfg.xml");
 
-                System.out.println("*** Hibernate Configuration loaded");
+                if (debug) {
+                    System.out.println("*** Hibernate Configuration loaded");
+                }
 
                 ServiceRegistry serviceRegistry
                         = new StandardServiceRegistryBuilder()
                         .applySettings(configuration.getProperties())
                         .build();
 
-                System.out.println("*** Hibernate serviceRegistry created");
+                if (debug) {
+                    System.out.println("*** Hibernate serviceRegistry created");
+                }
 
                 sessionFactory = configuration.buildSessionFactory(serviceRegistry);
 
-                System.out.println("*** Hibernate sessionFactory created");
+                if (debug) {
+                    System.out.println("*** Hibernate sessionFactory created");
+                }
 
             } catch (Exception ex) {
                 String msg = "\n*** Hey, Exception!!\n";
@@ -43,7 +51,7 @@ public class HibernateUtil {
             }
         }
 
-        if(sessionFactory != null) {
+        if (sessionFactory != null && debug) {
             System.out.println("\n*** Hibernate: sessionFactory returned.\n");
         }
         return sessionFactory;
@@ -51,6 +59,8 @@ public class HibernateUtil {
 
     public static void shutdown() {
         getSessionFactory().close();
-        System.out.println("*** Hibernate shutdown!");
+        if (debug) {
+            System.out.println("*** Hibernate shutdown!");
+        }
     }
 }

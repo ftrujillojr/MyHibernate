@@ -6,31 +6,52 @@
 <hibernate-configuration>
  
     <session-factory> 
+        
+        <property name ="hibernate.mapping.precedence property">class</property>
+        
         <property name ="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property> 
         <property name ="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property> 
         <property name ="hibernate.connection.url">jdbc:mysql://localhost:3306/Example1DB</property>
         <property name ="hibernate.connection.username">hibernate_user</property> 
-        <property name ="hibernate.connection.password">@ChangeMe123</property> 
-        <property name ="hibernate.current_session_context_class">thread</property>
-        <property name ="show_sql" >true</property >
-        <property name ="hibernate.format_sql" >true</property> 
-        <property name ="hibernate.connection.autocommit" >false</property> 
-        <property name ="hibernate.jdbc.batch_size" >50</property> 
-        <property name ="hibernate.cache.use_second_level_cache" >false</property> 
+        <property name ="hibernate.connection.password">@ChangeMe123</property>
 
-        <!-- A real connection pool -->
-        <property name="hibernate.c3p0.acquire_increment">1</property>
-        <property name="hibernate.c3p0.idle_test_period">100</property>
+        <property name ="hibernate.connection.autocommit" >false</property> 
+        
+        <!--        
+                The Hibernate session is bound to the current "thread".   
+                Therefore, when the transaction is committed, the session is 
+                closed also. 
+        -->
+        <property name ="hibernate.current_session_context_class">thread</property>
+        
+        <property name ="show_sql">true</property >
+        <property name ="hibernate.format_sql">true</property> 
+        <property name ="hibernate.jdbc.batch_size">50</property> 
+        <property name ="hibernate.cache.use_second_level_cache">false</property> 
+
+        <!-- 
+                A real connection pool. This is a MUST for production.
+                
+                https://developer.jboss.org/wiki/HowToConfigureTheC3P0ConnectionPool
+                
+                https://docs.jboss.org/hibernate/orm/4.3/devguide/en-US/html_single/#d5e154
+        -->
+        <property name="hibernate.c3p0.min_size">1</property>
         <property name="hibernate.c3p0.max_size">10</property>
+        <property name="hibernate.c3p0.acquire_increment">1</property>
+        <property name="hibernate.c3p0.idle_test_period">10</property>
         <property name="hibernate.c3p0.max_statements">10</property>
-        <property name="hibernate.c3p0.min_size">10</property>
-        <property name="hibernate.c3p0.timeout">100</property>
+        <property name="hibernate.c3p0.timeout">30</property>
 
         <!--  DO NOT USE hbm2ddl.auto in production!! This will destroy database-->
         <property name ="hbm2ddl.auto">create</property> 
         
-        <!--        <mapping class="org.me.orm.Employee"/>
-        <mapping class="org.me.orm.Department"/>-->
+
+        <!--
+                Now, map the Hibernate Annotated Objects
+        -->
+        <mapping class="org.me.models.Employee"/>
+        <mapping class="org.me.models.Department"/>
         
     </session-factory>
     
