@@ -1,10 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This web.xml file is not required when using Servlet 3.0 container,
      see implementation details http://jersey.java.net/nonav/documentation/latest/jax-rs.html -->
+     
+<!--    http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/web-app_2_5.xsd 
+web-app
+   filter
+      filter-name
+      filter-class full.class
+      init-param
+   filter-mapping
+      filter-name
+      url-pattern OR servlet-name
+      displatcher
+   listener
+      listener-class  full.class
+   servlet
+      servlet-name full.package
+      servlet-class full.package
+      init-param
+      load-on-startup  neg or pos integer
+   servlet-mapping
+   session-config
+      session-timeout  integer
+   mime-mapping
+   welcome-file-list
+      welcome-file   /relative.jsp
+   error-page
+      error-code 
+      exception-type full.class
+   jsp-config
+   security-constraint
+      diplay-name
+      web-resource-collection
+         web-resource-name
+         description
+         url-pattern
+         http-method
+      auth-constraint
+      user-data-constraint
+   login-config
+      auth-method Legal values are "BASIC", "DIGEST", "FORM", "CLIENT-CERT"
+      realm-name  string
+   security-role
+-->        
+     
 <web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
-    <welcome-file-list>
-        <welcome-file>/index.jsp</welcome-file>
-    </welcome-file-list>
+
+    <listener>
+        <listener-class>org.me.ServletContext</listener-class>
+    </listener>        
     
 <!--    <servlet>
         <servlet-name>org.me.rest.MyApplication</servlet-name>
@@ -35,8 +79,10 @@
                         
     <session-config>
         <session-timeout>30</session-timeout>
-        <cookie-config>
-            <name>SESSIONID</name>
-        </cookie-config>
     </session-config>
+    
+    <welcome-file-list>
+        <welcome-file>/index.jsp</welcome-file>
+    </welcome-file-list>
+    
 </web-app>
