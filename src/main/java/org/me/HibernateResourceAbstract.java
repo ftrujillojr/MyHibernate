@@ -11,7 +11,7 @@ public abstract class HibernateResourceAbstract {
     protected Transaction tx = null;
 
     public HibernateResourceAbstract() {
-        this.debug = false;
+        this.debug = true;
     }
 
     protected void setDebug(boolean debug) {
