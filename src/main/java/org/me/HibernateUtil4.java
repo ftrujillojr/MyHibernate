@@ -1,5 +1,6 @@
 package org.me;
 
+import java.io.File;
 import javax.ws.rs.WebApplicationException;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -8,15 +9,16 @@ import org.hibernate.service.ServiceRegistry;
 
 /**
  * This bootstrap works for Hibernate 4.3.11.Final
- * 
+ *
  * http://www.codejava.net/frameworks/hibernate/building-hibernate-sessionfactory-from-service-registry
- * 
+ *
  * @author ftrujillo
  */
 public class HibernateUtil4 {
 
     private static SessionFactory sessionFactory;
     private static boolean debug = false;
+    private static final String HIBERNATE_CFG_FILE = "hibernate.cfg.xml";
 
     public HibernateUtil4() {
     }
@@ -25,7 +27,11 @@ public class HibernateUtil4 {
         HibernateUtil4.debug = debug;
     }
 
+
     public static SessionFactory getSessionFactory() {
+        ClassLoader classLoader = HibernateUtil4.class.getClassLoader();
+        File hibernateConfigFile = new File(classLoader.getResource(HIBERNATE_CFG_FILE).getFile());
+
         if (sessionFactory == null) {
             try {
                 // loads configuration and mappings
